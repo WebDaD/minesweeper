@@ -1,22 +1,22 @@
 /*
  cell_toucher.js
- Author: Michael Butler
- Url: https://github.com/michaelbutler/minesweeper
+ Author: Dominik Sigmund
+ Url: https://github.com/webdad/gardenplay
 
- This file is part of Minesweeper.js.
+ This file is part of GardenPlay.js.
 
- Minesweeper.js is free software: you can redistribute it and/or modify
+ GardenPlay.js is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- Minesweeper.js is distributed in the hope that it will be useful,
+ GardenPlay.js is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with Minesweeper.js.  If not, see <http://www.gnu.org/licenses/>.
+ along with GardenPlay.js.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 var self = this;
@@ -151,7 +151,7 @@ function touchAdjacent(obj, grid) {
     return grid;
 }
 
-function minesweeperCalculateWin(grid) {
+function gardenplayCalculateWin(grid) {
     var win = false,
         mines = 0,
         closed_cells = 0,
@@ -199,7 +199,7 @@ if (self.document === undefined) {
         else if (data.type === 'calc_win') {
             resp = {
                 'type': data.type,
-                'win': minesweeperCalculateWin(grid)
+                'win': gardenplayCalculateWin(grid)
             };
         }
         else if (data.type === 'get_adjacent') {

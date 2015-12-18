@@ -1,4 +1,4 @@
-/* minesweeper.css */
+/* gardenplay.css */
 
 html, body {
    margin: 0;
@@ -52,7 +52,7 @@ h1 {
    width: 18px;
    height: 18px;
    border: 3px outset #aaa;
-   background-color: #c9c9c9;
+   background-color: lightgreen;
    vertical-align: middle;
    text-align: center;
    line-height: 19px;
@@ -85,8 +85,8 @@ h1 {
    background-color: lightblue;
 }
 
-.board-wrap .row .cell.explode {
-   color: red;
+.board-wrap .row .cell.splash {
+   color: blue;
    background-color: white;
 }
 

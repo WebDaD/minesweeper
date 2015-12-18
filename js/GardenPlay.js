@@ -1,27 +1,27 @@
 /**
- MineSweeper.js
- Author: Michael C. Butler
- Url: https://github.com/michaelbutler/minesweeper
+ GardenPlay.js
+ Author: Dominik Sigmund
+ Url: https://github.com/webdad/GardenPlay
 
  Dependencies: jQuery, jQuery UI CSS (for icons)
 
- This file is part of Minesweeper.js.
+ This file is part of GardenPlay.js.
 
- Minesweeper.js is free software: you can redistribute it and/or modify
+ GardenPlay.js is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
 
- Minesweeper.js is distributed in the hope that it will be useful,
+ GardenPlay.js is distributed in the hope that it will be useful,
  but WITHOUT ANY WARRANTY; without even the implied warranty of
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with Minesweeper.js.  If not, see <http://www.gnu.org/licenses/>.
+ along with GardenPlay.js.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-var MineSweeper;
+var GardenPlay;
 
 
 jQuery(function ($) {
@@ -31,15 +31,15 @@ jQuery(function ($) {
     var levels = {
         'beginner': {
             'board_size': [9, 9],
-            'num_mines': 10
+            'num_ponds': 10
         },
         'intermediate': {
             'board_size': [16, 16],
-            'num_mines': 40
+            'num_ponds': 40
         },
         'expert': {
             'board_size': [30, 16],
-            'num_mines': 99
+            'num_ponds': 99
         }
     };
 
@@ -48,22 +48,22 @@ jQuery(function ($) {
         STATE_OPEN = 'open',
         STATE_NUMBER = 'number',
         STATE_FLAGGED = 'flagged',
-        STATE_EXPLODE = 'explode',
+        STATE_SPLASH = 'splash',
         STATE_QUESTION = 'question';
 
-    MineSweeper = function () {
+    GardenPlay = function () {
         // prevent namespace pollution
-        if (!(this instanceof MineSweeper)) {
-            throw "Invalid use of Minesweeper";
+        if (!(this instanceof GardenPlay)) {
+            throw "Invalid use of GardenPlay";
         }
         var self = this;
         self.options = {};
         self.grid = [];
         self.running = true;
         self.defaults = {
-            selector: '#minesweeper',
+            selector: '#GardenPlay',
             board_size: levels.beginner.board_size,
-            num_mines: levels.beginner.num_mines,
+            num_ponds: levels.beginner.num_ponds,
             path_to_cell_toucher: 'js/cell_toucher.js'
         };
         self.RIGHT_MOUSE_CLICKED = false;
@@ -72,7 +72,7 @@ jQuery(function ($) {
             self.options = $.extend({}, self.defaults, options || {});
             self.element = $(self.options.selector);
             if (!self.element.length) {
-                throw "MineSweeper element not found";
+                throw "GardenPlay element not found";
             }
             if (!window.JSON) {
                 throw "This application requires a JSON parser.";
@@ -182,7 +182,7 @@ jQuery(function ($) {
                 return;
             }
             var obj = self.getCellObj(cell),
-                flagDisplay = $('#mine_flag_display'),
+                flagDisplay = $('#pond_flag_display'),
                 curr;
             if (obj.state === STATE_OPEN || obj.state === STATE_NUMBER) {
                 return;
@@ -307,7 +307,7 @@ jQuery(function ($) {
             var width = self.options.board_size[0],
                 height = self.options.board_size[1],
             // Total Mines is a percentage of the total number of cells
-                total_mines = self.options.num_mines,
+                total_mines = self.options.num_ponds,
                 array = [],
                 x,
                 max;
@@ -350,13 +350,13 @@ jQuery(function ($) {
             if (level === 'custom') {
                 var dim_x = parseInt($('#dim_x').val(), 10);
                 var dim_y = parseInt($('#dim_y').val(), 10);
-                var num_mines = parseInt($('#num_mines').val(), 10);
+                var num_ponds = parseInt($('#num_ponds').val(), 10);
 
                 self.options.board_size = [dim_x, dim_y];
-                self.options.num_mines = num_mines;
+                self.options.num_ponds = num_ponds;
             } else {
                 self.options.board_size = levels[level].board_size;
-                self.options.num_mines = levels[level].num_mines;
+                self.options.num_ponds = levels[level].num_ponds;
             }
 
         };
@@ -380,15 +380,15 @@ jQuery(function ($) {
         this.resetDisplays = function () {
 
             var level = $('#level option:selected').val();
-            var num_mines;
+            var num_ponds;
 
             if (level === 'custom') {
-                num_mines = $('#num_mines').val();
+                num_ponds = $('#num_ponds').val();
             } else {
-                num_mines = levels[level].num_mines;
+                num_ponds = levels[level].num_ponds;
             }
 
-            $('#mine_flag_display').val(num_mines);
+            $('#pond_flag_display').val(num_ponds);
             $('#timer').val(0);
         };
 
@@ -460,7 +460,7 @@ jQuery(function ($) {
                 if (!window.touchAdjacent) {
                     throw ("Could not load " + self.options.path_to_cell_toucher);
                 }
-                var win = minesweeperCalculateWin(self.grid);
+                var win = GardenPlayCalculateWin(self.grid);
                 if (win) {
                     self.winGame();
                 }
@@ -501,7 +501,7 @@ jQuery(function ($) {
                     break;
                 case STATE_UNKNOWN:
                 case STATE_OPEN:
-                case STATE_EXPLODE:
+                case STATE_SPLASH:
                     cell.addClass(gridobj.state);
                     break;
                 case STATE_NUMBER:
@@ -530,7 +530,7 @@ jQuery(function ($) {
 
             if (cellParam) {
                 cellParam.removeClass();
-                cellParam.addClass("cell " + STATE_EXPLODE);
+                cellParam.addClass("cell " + STATE_SPLASH);
             }
             for (y = 0; y < height; y++) {
                 for (x = 0; x < width; x++) {
@@ -589,8 +589,8 @@ jQuery(function ($) {
         this.get_template = function (template) {
             var templates = {
                 'actions': '<div class="game_actions"><button class="new-game">New Game</button><button id="best_times">Best times</button></div>',
-                'settings': '<div class="game_settings"><select id="level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="expert">Expert</option><option value="custom">Custom</option></select>    <input type="text" id="dim_x" placeholder="x" size="5" disabled /><input type="text" id="dim_y" placeholder="y" size="5" disabled /><input type="text" id="num_mines" placeholder="mines" size="5" disabled /></div>',
-                'status': '<div class="game_status"><label>Time:</label><input type="text" id="timer" size="6" value="0" readonly /><label>Mines:</label><input type="text" id="mine_flag_display" size="6" value="10" disabled />'
+                'settings': '<div class="game_settings"><select id="level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="expert">Expert</option><option value="custom">Custom</option></select>    <input type="text" id="dim_x" placeholder="x" size="5" disabled /><input type="text" id="dim_y" placeholder="y" size="5" disabled /><input type="text" id="num_ponds" placeholder="mines" size="5" disabled /></div>',
+                'status': '<div class="game_status"><label>Time:</label><input type="text" id="timer" size="6" value="0" readonly /><label>Mines:</label><input type="text" id="pond_flag_display" size="6" value="10" disabled />'
             };
 
             return templates[template];
