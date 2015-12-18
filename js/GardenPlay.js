@@ -306,15 +306,15 @@ jQuery(function ($) {
         this.getRandomMineArray = function () {
             var width = self.options.board_size[0],
                 height = self.options.board_size[1],
-            // Total Mines is a percentage of the total number of cells
-                total_mines = self.options.num_ponds,
+            // Total ponds is a percentage of the total number of cells
+                total_ponds = self.options.num_ponds,
                 array = [],
                 x,
                 max;
 
-            // Put all mines in the beginning
+            // Put all ponds in the beginning
             for (x = 0, max = width * height; x < max; x++) {
-                if (x < total_mines) {
+                if (x < total_ponds) {
                     array[x] = 1;
                 }
                 else {
@@ -589,8 +589,8 @@ jQuery(function ($) {
         this.get_template = function (template) {
             var templates = {
                 'actions': '<div class="game_actions"><button class="new-game">New Game</button><button id="best_times">Best times</button></div>',
-                'settings': '<div class="game_settings"><select id="level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="expert">Expert</option><option value="custom">Custom</option></select>    <input type="text" id="dim_x" placeholder="x" size="5" disabled /><input type="text" id="dim_y" placeholder="y" size="5" disabled /><input type="text" id="num_ponds" placeholder="mines" size="5" disabled /></div>',
-                'status': '<div class="game_status"><label>Time:</label><input type="text" id="timer" size="6" value="0" readonly /><label>Mines:</label><input type="text" id="pond_flag_display" size="6" value="10" disabled />'
+                'settings': '<div class="game_settings"><select id="level"><option value="beginner">Beginner</option><option value="intermediate">Intermediate</option><option value="expert">Expert</option><option value="custom">Custom</option></select>    <input type="text" id="dim_x" placeholder="x" size="5" disabled /><input type="text" id="dim_y" placeholder="y" size="5" disabled /><input type="text" id="num_ponds" placeholder="ponds" size="5" disabled /></div>',
+                'status': '<div class="game_status"><label>Time:</label><input type="text" id="timer" size="6" value="0" readonly /><label>ponds:</label><input type="text" id="pond_flag_display" size="6" value="10" disabled />'
             };
 
             return templates[template];

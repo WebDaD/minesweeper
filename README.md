@@ -50,6 +50,8 @@ To Do:
 + Bigger Icons and bigger grid
 + check for mobile
 + Enhance UI for a sleek new look
++ Use nice icons for items
++ tune colors
 
 
 License:
